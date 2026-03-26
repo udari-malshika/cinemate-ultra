@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CineMate Elite | Cinema & Series</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,700&display=swap');
+
+        :root {
+            --premium-gold: #d4af37;
+            --premium-gold-light: #f1d592;
+            --bg-deep: #0f151f;
+            --card-glass: rgba(255, 255, 255, 0.03);
+            --border-glass: rgba(255, 255, 255, 0.08);
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-deep);
+            color: #ddddec;
+            margin: 0;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        h1, h2, .premium-serif {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: var(--bg-deep); }
+        ::-webkit-scrollbar-thumb { background: #1a1e26; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--premium-gold); }
+
+        .glass-nav {
+            background: rgba(5, 7, 10, 0.75);
+            backdrop-filter: blur(25px);
+            border-bottom: 1px solid var(--border-glass);
+        }
+
+        .gold-text {
+            background: linear-gradient(to right, var(--premium-gold), var(--premium-gold-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .gold-border {
+            border: 1px solid var(--premium-gold);
+        }
+
+        .premium-btn {
+            background: linear-gradient(45deg, #d4af37, #f1d592);
+            color: #000;
+            font-weight: 700;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.15);
+        }
+
+        .premium-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.3);
+        }
+
+        .nav-link {
+            position: relative;
+            padding: 8px 0;
+            color: #94a3b8;
+            transition: all 0.3s;
+            font-size: 0.8rem;
+            letter-spacing: 0.1em;
+            font-weight: 600;
+        }
+
+        .nav-link.active {
+            color: var(--premium-gold);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 1.5px;
+            background: var(--premium-gold);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link.active::after {
+            width: 100%;
+        }
+
+        .hero-gradient {
+            background: radial-gradient(circle at top right, rgba(212, 175, 55, 0.08), transparent 50%),
+                        radial-gradient(circle at bottom left, rgba(59, 130, 246, 0.05), transparent 50%);
+        }
+
+        .movie-card-premium {
+            background: var(--card-glass);
+            border: 1px solid var(--border-glass);
+            border-radius: 20px;
+            transition: all 0.5s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .movie-card-premium:hover {
+            border-color: rgba(212, 175, 55, 0.4);
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        .card-img-container {
+            position: relative;
+            aspect-ratio: 2/3;
+            overflow: hidden;
+        }
+
+        .card-img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.7s ease;
+        }
+
+        .movie-card-premium:hover .card-img-container img {
+            transform: scale(1.1);
+        }
+
+        .img-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(5,7,10,1) 0%, rgba(5,7,10,0) 60%);
+        }
+
+        .floating-ai {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 100;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
+
+        .fade-in { animation: fadeIn 0.8s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .shimmer {
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent);
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+    </style>
+</head>
+<body class="hero-gradient min-h-screen">
+
+    <!-- Premium Navigation -->
+    <nav class="glass-nav fixed top-0 w-full z-50 px-8 py-4 flex justify-between items-center">
+        <div class="flex items-center gap-4 cursor-pointer group" onclick="navigate('home')">
+            <div class="w-11 h-11 gold-border rounded-xl flex items-center justify-center text-premium-gold group-hover:bg-premium-gold group-hover:text-black transition-all duration-500">
+                <i class="fa-solid fa-crown text-xl"></i>
+            </div>
+            <div>
+                <h1 class="text-2xl font-bold tracking-tight gold-text">CineMate</h1>
+                <p class="text-[8px] uppercase tracking-[0.4em] text-gray-500 font-bold -mt-1">ELITE COLLECTION</p>
+            </div>
+        </div>
+
+        <div class="hidden lg:flex items-center gap-12">
+            <button id="nav-home" onclick="navigate('home')" class="nav-link active">HOME</button>
+            <button id="nav-movies" onclick="navigate('movies')" class="nav-link">MOVIES</button>
+            <button id="nav-tv" onclick="navigate('tv')" class="nav-link">SERIES</button>
+            <button id="nav-favs" onclick="navigate('favs')" class="nav-link">WATCHLIST</button>
+        </div>
+
+        <div class="flex items-center gap-6">
+            <div class="hidden md:flex items-center gap-3 pr-6 border-r border-white/10">
+                <div class="text-right">
+                    <p class="text-[10px] font-bold text-white leading-none">Udari Malshika</p>
+                    <p class="text-[9px] text-premium-gold font-bold tracking-tighter">Your Profile</p>
+                </div>
+                <div class="w-10 h-10 rounded-full border border-premium-gold/30 p-0.5">
+                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix&backgroundColor=05070a" class="w-full h-full rounded-full" alt="avatar">
+                </div>
+            </div>
+            <button onclick="toggleAiModal()" class="text-gray-400 hover:text-premium-gold transition text-lg">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content Rendering Area -->
+    <main id="main-view" class="pt-28 pb-20">
+        <!-- Views are dynamically injected here -->
+    </main>
+
+    <!-- Floating AI Prompt -->
+    <button onclick="toggleAiModal()" class="floating-ai w-16 h-16 premium-btn rounded-2xl flex items-center justify-center text-xl shadow-2xl">
+        <i class="fa-solid fa-wand-magic-sparkles"></i>
+    </button>
+
+    <!-- Footer -->
+    <footer class="border-t border-white/5 bg-[#05070a] py-16 px-8">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
+            <div class="text-center md:text-left">
+                <h2 class="gold-text text-2xl font-bold mb-2">CineMate Elite</h2>
+                <p class="text-gray-500 text-xs tracking-widest uppercase">The Pinnacle of Home Cinema</p>
+            </div>
+            <div class="flex gap-8 text-xs font-bold text-gray-400 uppercase tracking-widest">
+                <a href="#" class="hover:text-premium-gold transition">Privacy</a>
+                <a href="#" class="hover:text-premium-gold transition">Terms</a>
+                <a href="#" class="hover:text-premium-gold transition">Studio Access</a>
+            </div>
+            <p class="text-[10px] text-gray-700 font-bold uppercase tracking-widest">© 2024 ELITE MEDIA GROUP</p>
+        </div>
+    </footer>
+
+    <!-- Modals -->
+    <div id="detailsModal" class="fixed inset-0 z-[100] hidden bg-black/98 backdrop-blur-2xl flex items-center justify-center p-4">
+        <div id="modalInner" class="w-full max-w-6xl bg-[#0a0c12] rounded-[40px] border border-white/10 overflow-hidden relative shadow-2xl"></div>
+    </div>
+
+    <div id="aiModal" class="fixed inset-0 z-[100] hidden bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="bg-[#0f111a] w-full max-w-xl rounded-[32px] p-10 border border-white/10 shadow-2xl relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-premium-gold/5 rounded-full blur-3xl -mr-16 -mt-16"></div>
+            <div class="flex justify-between items-center mb-8 relative z-10">
+                <div>
+                    <h3 class="text-2xl font-bold gold-text">Cinemax AI Concierge</h3>
+                    <p class="text-xs text-gray-500 uppercase tracking-widest font-bold mt-1">Ready for your request</p>
+                </div>
+                <button onclick="toggleAiModal()" class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:text-premium-gold transition">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div id="aiChatArea" class="h-64 overflow-y-auto mb-6 space-y-4 no-scrollbar pr-2">
+                <div class="bg-white/5 p-5 rounded-3xl rounded-tl-none border border-white/5 text-sm leading-relaxed text-gray-300">
+                    Welcome back to the Elite Lounge, Alexander. I have access to the full studio archives tonight. What cinematic masterpiece shall we discover?
+                </div>
+            </div>
+            <div class="relative z-10">
+                <textarea id="aiPrompt" placeholder="Describe a mood, a genre, or a specific vibe..." class="w-full bg-black/40 border border-white/10 rounded-2xl p-5 h-28 resize-none focus:outline-none focus:border-premium-gold/40 transition-all text-sm text-gray-200"></textarea>
+                <button onclick="askScout()" id="aiBtn" class="absolute bottom-4 right-4 premium-btn px-6 py-2.5 rounded-xl text-xs uppercase tracking-widest font-black">Find</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const contentDB = [
+            { id: 1, type: 'movie', title: "The Dark Knight", year: 2008, rating: 9.0, genre: "Action", label: 'Masterpiece', director: "Christopher Nolan", img: "https://images.unsplash.com/photo-1478720568477-152d9b164e26?auto=format&fit=crop&q=80&w=800", desc: "When the menace known as the Joker wreaks havoc and chaos on the people of Gotham, Batman must accept one of the greatest psychological and physical tests of his ability to fight injustice." },
+            { id: 2, type: 'movie', title: "Inception", year: 2010, rating: 8.8, genre: "Sci-Fi", label: 'Mind-Bending', director: "Christopher Nolan", img: "https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&q=80&w=800", desc: "A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O." },
+            { id: 3, type: 'tv', title: "Breaking Bad", year: 2008, rating: 9.5, genre: "Drama", label: 'Legendary', director: "Vince Gilligan", img: "https://images.unsplash.com/photo-1594909122845-11baa439b7bf?auto=format&fit=crop&q=80&w=800", desc: "A high school chemistry teacher diagnosed with inoperable lung cancer turns to manufacturing and selling methamphetamine." },
+            { id: 4, type: 'movie', title: "Interstellar", year: 2014, rating: 8.7, genre: "Sci-Fi", label: 'Visionary', director: "Christopher Nolan", img: "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&q=80&w=800", desc: "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival." },
+            { id: 5, type: 'movie', title: "Dune: Part Two", year: 2024, rating: 8.9, genre: "Sci-Fi", label: 'New Release', director: "Denis Villeneuve", img: "https://images.unsplash.com/photo-1509333303761-1b18afea585f?auto=format&fit=crop&q=80&w=800", desc: "Paul Atreides unites with Chani and the Fremen while on a warpath of revenge against the conspirators who destroyed his family." },
+            { id: 6, type: 'tv', title: "The Last of Us", year: 2023, rating: 8.8, genre: "Horror", label: 'Atmospheric', director: "Craig Mazin", img: "https://images.unsplash.com/photo-1612036782180-6f0b6cd846fe?auto=format&fit=crop&q=80&w=800", desc: "After a global pandemic destroys civilization, a hardened survivor takes charge of a 14-year-old girl who may be humanity's last hope." },
+            { id: 7, type: 'movie', title: "Oppenheimer", year: 2023, rating: 8.4, genre: "Drama", label: 'Historical', director: "Christopher Nolan", img: "https://images.unsplash.com/photo-1440404653325-ab127d49abc1?auto=format&fit=crop&q=80&w=800", desc: "The story of American scientist, J. Robert Oppenheimer, and his role in the development of the atomic bomb." },
+            { id: 8, type: 'movie', title: "Parasite", year: 2019, rating: 8.6, genre: "Thriller", label: 'Oscar Winner', director: "Bong Joon-ho", img: "https://images.unsplash.com/photo-1533928298208-27ff66555d8d?auto=format&fit=crop&q=80&w=800", desc: "Greed and class discrimination threaten the symbiotic relationship between the wealthy Park family and the destitute Kim clan." },
+            { id: 9, type: 'tv', title: "Succession", year: 2018, rating: 8.9, genre: "Drama", label: 'Peak TV', director: "Jesse Armstrong", img: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=800", desc: "The Roy family is known for controlling the biggest media and entertainment company in the world." },
+            { id: 10, type: 'movie', title: "The Godfather", year: 1972, rating: 9.2, genre: "Crime", label: 'The GOAT', director: "Francis Ford Coppola", img: "https://images.unsplash.com/photo-1593085512500-5d55148d6f0d?auto=format&fit=crop&q=80&w=800", desc: "The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son." }
+        ];
+
+        let favourites = JSON.parse(localStorage.getItem('cinemate_premium_favs')) || [];
+        let currentView = 'home';
+
+        function navigate(view) {
+            currentView = view;
+            const container = document.getElementById('main-view');
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            if(document.getElementById(`nav-${view}`)) {
+                document.getElementById(`nav-${view}`).classList.add('active');
+            }
+            window.scrollTo({top: 0, behavior: 'smooth'});
+
+            switch(view) {
+                case 'home': renderHome(container); break;
+                case 'movies': renderCatalog(container, 'movie'); break;
+                case 'tv': renderCatalog(container, 'tv'); break;
+                case 'favs': renderWatchlist(container); break;
+            }
+        }
+
+        function renderHome(container) {
+            container.innerHTML = `
+                <div class="px-8 md:px-20 fade-in">
+                    <!-- Hero Component -->
+                    <div class="relative h-[600px] rounded-[40px] overflow-hidden mb-24 group border border-white/5">
+                        <img src="https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&q=80&w=1600" class="absolute inset-0 w-full h-full object-cover opacity-50 transition-transform duration-1000 group-hover:scale-110" alt="Hero">
+                        <div class="absolute inset-0 bg-gradient-to-r from-[#05070a] via-[#05070a]/80 to-transparent z-10"></div>
+                        <div class="relative z-20 h-full flex flex-col justify-center px-12 md:px-20 max-w-4xl">
+                            <div class="flex items-center gap-3 text-premium-gold font-black text-[10px] tracking-[0.4em] mb-6 uppercase">
+                                <span class="w-12 h-[1px] bg-premium-gold"></span> Elite Premiere of the week
+                            </div>
+                            <h2 class="text-6xl md:text-8xl font-bold mb-8 leading-tight">Dune: <span class="italic premium-serif">Part Two</span></h2>
+                            <p class="text-gray-400 text-lg md:text-xl leading-relaxed mb-12 max-w-2xl">Experience Denis Villeneuve's desert masterpiece. A fusion of myth, scale, and high-fidelity sound. Now available for VIP members.</p>
+                            <div class="flex flex-wrap gap-6">
+                                <button onclick="openDetails(5)" class="premium-btn px-12 py-5 rounded-2xl flex items-center gap-4 text-sm tracking-widest uppercase">
+                                    <i class="fa-solid fa-play"></i> Experience
+                                </button>
+                                <button onclick="toggleFav(5)" class="bg-white/5 border border-white/10 px-10 py-5 rounded-2xl font-black text-xs tracking-widest uppercase hover:bg-white/10 transition-all">
+                                    + Add to Library
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Trending Grid -->
+                    <div class="flex justify-between items-end mb-12">
+                        <div>
+                            <h3 class="text-4xl font-bold mb-2 gold-text">Studio Highlights</h3>
+                            <p class="text-gray-500 text-sm tracking-widest font-bold uppercase">Hand-picked by our lead curators</p>
+                        </div>
+                        <button onclick="navigate('movies')" class="text-xs font-bold text-gray-400 hover:text-premium-gold uppercase tracking-[0.2em] transition">Explore Gallery <i class="fa-solid fa-chevron-right ml-2 text-[8px]"></i></button>
+                    </div>
+
+                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-10">
+                        ${contentDB.slice(0, 5).map(m => createCard(m)).join('')}
+                    </div>
+
+                    <!-- Editorial Section -->
+                    <div class="mt-32 relative rounded-[50px] overflow-hidden bg-white/[0.02] border border-white/5 p-16 md:p-24">
+                        <div class="absolute top-0 right-0 w-1/2 h-full opacity-20 pointer-events-none">
+                             <img src="https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover mask-gradient">
+                        </div>
+                        <div class="relative z-10 max-w-2xl">
+                             <h4 class="gold-text font-black text-xs tracking-[0.4em] mb-8 uppercase">The Curator's Essay</h4>
+                             <p class="text-3xl md:text-5xl font-bold mb-10 leading-snug">"Cinema is a matter of what's in the <span class="italic premium-serif">frame</span> and what is not."</p>
+                             <div class="flex items-center gap-4">
+                                 <div class="w-14 h-14 rounded-2xl gold-border flex items-center justify-center text-premium-gold">
+                                     <i class="fa-solid fa-user-secret text-2xl"></i>
+                                 </div>
+                                 <div>
+                                     <p class="font-bold text-sm tracking-wider">Martin S. Rossi</p>
+                                     <p class="text-[10px] text-gray-500 font-bold tracking-widest uppercase">Chief Creative Officer</p>
+                                 </div>
+                             </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderCatalog(container, type) {
+            const title = type === 'movie' ? 'The Film Archive' : 'The Series Collection';
+            const description = type === 'movie' ? 'High-fidelity cinema curated for the discerning viewer.' : 'Binge-worthy narratives with unprecedented production quality.';
+            
+            container.innerHTML = `
+                <div class="px-8 md:px-20 fade-in">
+                    <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
+                        <div>
+                            <p class="gold-text font-black text-[10px] tracking-[0.5em] mb-4 uppercase">Archive / 2024</p>
+                            <h2 class="text-5xl font-bold mb-4">${title}</h2>
+                            <p class="text-gray-500 text-sm max-w-xl">${description}</p>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="bg-white/5 border border-white/10 px-6 py-3 rounded-2xl flex items-center gap-4 cursor-pointer hover:border-premium-gold/50 transition">
+                                <i class="fa-solid fa-sliders text-xs text-premium-gold"></i>
+                                <span class="text-[10px] font-black tracking-widest uppercase">Filters</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-10">
+                        ${contentDB.filter(m => m.type === type).map(m => createCard(m)).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderWatchlist(container) {
+            container.innerHTML = `
+                <div class="px-8 md:px-20 fade-in">
+                    <div class="mb-16">
+                        <p class="gold-text font-black text-[10px] tracking-[0.5em] mb-4 uppercase">Private Vault</p>
+                        <h2 class="text-5xl font-bold mb-4">Your <span class="italic premium-serif">Watchlist</span></h2>
+                    </div>
+                    
+                    ${favourites.length > 0 ? `
+                        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-10">
+                            ${favourites.map(m => createCard(m)).join('')}
+                        </div>
+                    ` : `
+                        <div class="py-40 flex flex-col items-center justify-center text-center">
+                            <div class="w-24 h-24 rounded-[32px] bg-white/5 border border-white/5 flex items-center justify-center text-gray-700 mb-8">
+                                <i class="fa-solid fa-box-open text-4xl"></i>
+                            </div>
+                            <p class="text-xl text-gray-500 font-medium mb-8">Your private collection is currently empty.</p>
+                            <button onclick="navigate('home')" class="premium-btn px-10 py-4 rounded-2xl text-xs uppercase tracking-widest">Discover Now</button>
+                        </div>
+                    `}
+                </div>
+            `;
+        }
+
+        function createCard(m) {
+            const isFav = favourites.some(f => f.id === m.id);
+            return `
+                <div class="movie-card-premium group" onclick="openDetails(${m.id})">
+                    <div class="card-img-container">
+                        <div class="absolute inset-0 shimmer opacity-20"></div>
+                        <img src="${m.img}" alt="${m.title}">
+                        <div class="img-overlay"></div>
+                        
+                        <div class="absolute top-4 left-4 z-20">
+                            <span class="bg-black/60 backdrop-blur-xl text-[9px] font-black tracking-[0.2em] uppercase px-3 py-1.5 rounded-lg border border-white/10 text-premium-gold">
+                                ${m.label}
+                            </span>
+                        </div>
+                        
+                        <div class="absolute top-4 right-4 z-20 opacity-0 group-hover:opacity-100 transition-all duration-300">
+                            <button onclick="event.stopPropagation(); toggleFav(${m.id})" class="w-10 h-10 rounded-xl bg-black/60 backdrop-blur-xl border border-white/10 flex items-center justify-center text-white hover:bg-premium-gold hover:text-black transition-all">
+                                <i class="${isFav ? 'fa-solid' : 'fa-regular'} fa-bookmark"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start gap-3 mb-2">
+                            <h4 class="font-bold text-sm leading-tight group-hover:gold-text transition-colors duration-300">${m.title}</h4>
+                            <div class="flex items-center gap-1 shrink-0">
+                                <i class="fa-solid fa-star text-[9px] text-premium-gold"></i>
+                                <span class="text-[10px] font-black">${m.rating}</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-[9px] text-gray-500 font-black uppercase tracking-widest">${m.genre}</span>
+                            <span class="w-1 h-1 rounded-full bg-gray-800"></span>
+                            <span class="text-[9px] text-gray-500 font-black uppercase tracking-widest">${m.year}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function openDetails(id) {
+            const m = contentDB.find(x => x.id === id);
+            const modal = document.getElementById('detailsModal');
+            const inner = document.getElementById('modalInner');
+            
+            inner.innerHTML = `
+                <div class="flex flex-col lg:flex-row h-full min-h-[600px]">
+                    <div class="w-full lg:w-2/5 relative overflow-hidden group">
+                        <img src="${m.img}" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#0a0c12] via-transparent to-transparent"></div>
+                        <div class="absolute bottom-10 left-10">
+                            <div class="flex gap-3">
+                                <span class="px-5 py-2 bg-premium-gold text-black rounded-xl font-black text-[10px] uppercase tracking-widest">4K Dolby</span>
+                                <span class="px-5 py-2 bg-white/10 backdrop-blur-xl rounded-xl font-black text-[10px] uppercase tracking-widest border border-white/10">Studio Master</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex-1 p-12 lg:p-20 flex flex-col justify-center relative">
+                        <button onclick="closeDetails()" class="absolute top-10 right-10 w-12 h-12 rounded-full bg-white/5 flex items-center justify-center hover:bg-white/10 transition">
+                            <i class="fa-solid fa-xmark text-xl text-gray-400"></i>
+                        </button>
+                        
+                        <div class="mb-12">
+                            <p class="gold-text font-black text-[10px] tracking-[0.5em] uppercase mb-6">${m.genre} • ${m.year}</p>
+                            <h2 class="text-5xl md:text-7xl font-bold mb-8 leading-tight">${m.title}</h2>
+                            <div class="flex items-center gap-10 mb-10">
+                                <div class="flex flex-col">
+                                    <span class="text-gray-500 uppercase tracking-widest text-[9px] font-black mb-1">Director</span>
+                                    <span class="font-bold text-sm">${m.director}</span>
+                                </div>
+                                <div class="flex flex-col">
+                                    <span class="text-gray-500 uppercase tracking-widest text-[9px] font-black mb-1">Elite Rating</span>
+                                    <span class="font-bold text-sm gold-text">${m.rating} / 10</span>
+                                </div>
+                            </div>
+                            <p class="text-gray-400 text-lg leading-relaxed max-w-2xl">${m.desc}</p>
+                        </div>
+
+                        <div class="flex flex-wrap gap-6">
+                            <button class="premium-btn px-14 py-5 rounded-2xl flex items-center gap-4 text-xs font-black tracking-[0.2em] uppercase">
+                                <i class="fa-solid fa-play"></i> Start Screening
+                            </button>
+                            <button onclick="toggleFav(${m.id}); closeDetails()" class="bg-white/5 border border-white/10 px-10 py-5 rounded-2xl font-black text-xs tracking-widest uppercase hover:bg-white/10 transition-all">
+                                Watchlist
+                            </button>
+                            <button class="w-16 h-16 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center hover:bg-white/10 transition text-gray-400">
+                                <i class="fa-solid fa-share-nodes"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeDetails() {
+            document.getElementById('detailsModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        function toggleFav(id) {
+            const movie = contentDB.find(m => m.id === id);
+            const index = favourites.findIndex(f => f.id === id);
+            if (index > -1) {
+                favourites.splice(index, 1);
+            } else {
+                favourites.push(movie);
+            }
+            localStorage.setItem('cinemate_premium_favs', JSON.stringify(favourites));
+            navigate(currentView);
+        }
+
+        function toggleAiModal() {
+            const m = document.getElementById('aiModal');
+            m.classList.toggle('hidden');
+            if(!m.classList.contains('hidden')) {
+                document.getElementById('aiPrompt').focus();
+            }
+        }
+
+        async function askScout() {
+            const prompt = document.getElementById('aiPrompt').value;
+            const chat = document.getElementById('aiChatArea');
+            const btn = document.getElementById('aiBtn');
+            if(!prompt) return;
+
+            chat.innerHTML += `
+                <div class="flex justify-end">
+                    <div class="bg-premium-gold/10 border border-premium-gold/20 p-5 rounded-3xl rounded-tr-none text-sm text-premium-gold max-w-[85%]">
+                        ${prompt}
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('aiPrompt').value = '';
+            btn.disabled = true;
+            btn.innerText = "...";
+
+            const apiKey = "";
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+            
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ contents: [{ parts: [{ text: `You are an elite cinema concierge. Recommend 3 high-quality films based on: "${prompt}". Be elegant and brief.` }] }] })
+                });
+                const data = await response.json();
+                const resText = data.candidates[0].content.parts[0].text;
+                
+                chat.innerHTML += `
+                    <div class="bg-white/5 border border-white/5 p-5 rounded-3xl rounded-tl-none text-sm leading-relaxed text-gray-300 max-w-[85%]">
+                        ${resText}
+                    </div>
+                `;
+            } catch(e) {
+                chat.innerHTML += `<div class="text-red-400 text-[10px] font-bold uppercase tracking-widest italic opacity-50">Connection lost to Elite Network.</div>`;
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "Find";
+                chat.scrollTo({top: chat.scrollHeight, behavior: 'smooth'});
+            }
+        }
+
+        // Initialize App
+        window.onload = () => navigate('home');
+    </script>
+</body>
+</html>
