@@ -10,9 +10,11 @@ UI with glassmorphism, gold accents, and an integrated AI concierge system, all 
 perfect cinematic masterpiece using the Gemini 2.5 Flash API.
 
 3.Single Page Navigation: A custom JavaScript router manages different views:
-*Home: Featuring a cinematic Hero Billboard and curated "Studio Highlights."
-*The Film Archive: A dedicated catalog for high-fidelity movies.
-*Series Collection: A gallery for binge-worthy narrative television.
+
+Home: Featuring a cinematic Hero Billboard and curated "Studio Highlights."
+The Film Archive: A dedicated catalog for high-fidelity movies.
+
+Series Collection: A gallery for binge-worthy narrative television.
 
 4.Private Vault (Watchlist): A functional bookmarking system that persists user selections using localStorage.
 
